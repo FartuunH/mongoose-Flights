@@ -1,0 +1,15 @@
+<!-- views/tickets/new.ejs -->
+
+<h1>New Ticket</h1>
+
+<p>Flight: <%= flight.airline %> <%= flight.flightNo %> - <%= flight.airport %></p>
+
+<form action="/flights/<%= flight._id %>/tickets" method="POST">
+  <label for="seat">Seat:</label>
+  <input type="text" id="seat" name="seat" required pattern="[A-F][1-9]\d?">
+
+  <label for="price">Price:</label>
+  <input type="number" id="price" name="price" min="0" required>
+
+  <button type="submit">Create Ticket</button>
+</form>

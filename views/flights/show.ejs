@@ -1,0 +1,45 @@
+<!-- views/flights/show.ejs -->
+
+<h1><%= flight.airline %> Flight <%= flight.flightNo %></h1>
+<p>Departure: <%= flight.departs %></p>
+
+<h2>Destinations</h2>
+<ul>
+  <% flight.destinations.forEach(destination => { %>
+    <li><%= destination.airport %> - <%= destination.arrival %></li>
+  <% }); %>
+</ul>
+<h1>Flight Details</h1>
+<h2>Tickets</h2>
+<ul>
+  <% tickets.forEach(function(ticket) { %>
+    <li>
+      <strong>Seat:</strong> <%= ticket.seat %>, <strong>Price:</strong> $<%= ticket.price %>
+      <form action="/flights/<%= flight._id %>/tickets/<%= ticket._id %>?_method=DELETE" method="POST" style="display:inline;">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  <% }); %>
+</ul>
+
+<a href="/flights/<%= flight._id %>/tickets/new" class="btn btn-primary">New Ticket</a>
+
+
+<h2>Add Destination</h2>
+<form action="/flights/<%= flight._id %>/add-destination" method="post">
+  <label for="airport">Airport:</label>
+  <select name="airport">
+    <!-- Exclude airports that have already been used -->
+    <% const usedAirports = flight.destinations.map(dest => dest.airport); %>
+    <% ['AUS', 'DFW', 'DEN', 'LAX', 'SAN'].forEach(airport => { %>
+      <% if (!usedAirports.includes(airport) && airport !== flight.airport) { %>
+        <option value="<%= airport %>"><%= airport %></option>
+      <% } %>
+    <% }); %>
+  </select>
+
+  <label for="arrival">Arrival Date/Time:</label>
+  <input type="datetime-local" name="arrival" required>
+
+  <button type="submit">Add Destination</button>
+</form>
